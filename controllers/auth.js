@@ -3,6 +3,7 @@ const {  request, response } = require('express');
 const User = require('../models/user');
 const { compare } = require('../helpers/bcrypt');
 const { generateJWT } = require('../helpers/jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 const login = async( req = request, res = response ) => {
 
@@ -43,6 +44,49 @@ const login = async( req = request, res = response ) => {
 
 }
 
+const googleSignin = async( req, res = response ) => {
+
+    const { id_token } = req.body;
+    
+    try {
+        const { email, name, img } = await googleVerify( id_token );
+        
+        let user = await User.findOne( { email } );
+        
+        if ( !user ) {
+            const data = {
+                name,
+                email,
+                img,
+                password: ':)',
+                google: true
+            }
+            
+            user = new User( data );
+            await user.save();
+        } 
+        else if ( !user.state ) {
+            return res.status(401).json({
+                msg: 'Blocked user. Contact to administrator' 
+            });
+        }
+        
+        const token = await generateJWT( user.id );
+        
+        res.json({ user, token });
+        
+    } catch (error) {
+        console.log( error );
+
+        return res.status(400).json({
+            msg: 'Google token is not valid'
+        });
+    }
+
+
+}
+
 module.exports = {
-    login
+    login,
+    googleSignin
 }
