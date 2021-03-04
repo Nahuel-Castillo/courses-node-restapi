@@ -1,16 +1,15 @@
-
 const auth       = require('./auth');
-const products   = require('./products');
 const categories = require('./categories');
-const users      = require('./users');
+const products   = require('./products');
 const search     = require('./search');
 const uploads    = require('./uploads');
+const users      = require('./users');
 
 module.exports = {
-    auth,
-    products,
-    categories,
-    users,
-    search,
-    uploads
+    ...auth,
+    ...categories,
+    ...products,
+    ...search,
+    ...uploads,
+    ...users,
 }

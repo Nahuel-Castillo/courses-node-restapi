@@ -1,7 +1,6 @@
 
 const { response, request } = require('express');
-const { body } = require('express-validator');
-const { Product, Category } = require('../models');
+const { Product } = require('../models');
 
 const getProducts = async( req = request, res = response ) => {
 

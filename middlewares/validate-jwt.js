@@ -1,11 +1,9 @@
 const { verify } = require('jsonwebtoken');
 const { request, response } = require('express');
 
-const User = require('../models/user');
-const { use } = require('../routes/auth');
+const { User } = require('../models');
 
 const validateJWT = async( req = request, res = response, next ) => {
-    
     
     const token  = req.header('x-token');
 
@@ -20,7 +18,7 @@ const validateJWT = async( req = request, res = response, next ) => {
         user = await User.findById( uid );
 
         if ( !user ) {
-            res.status( 401 ).json({ msg: 'Token is not valid - User not exists in DB' });
+            return res.status( 401 ).json({ msg: 'Token is not valid - User not exists in DB' });
         }
 
         if ( !user.state ) {

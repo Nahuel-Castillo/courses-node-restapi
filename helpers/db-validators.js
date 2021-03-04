@@ -46,6 +46,7 @@ const existsCategoryByName = async( name = '' ) => {
 
 }
 
+//Products
 const existsProductById = async( id = '' ) => {
 
     const existsProduct = await Product.findById( id );
@@ -67,6 +68,18 @@ const existsProductByName = async( name = '' ) => {
 
 }
 
+//validate collections
+const validCollections = ( collection = '', collections = []) => {
+    
+    const isIncluded = collections.includes( collection );
+
+    if ( !isIncluded ) {
+        throw new Error(`Collection not valid - Valid collections ${ collections }`);
+    }
+
+    return true;
+}
+
 module.exports = {
     validateUserRole,
     validateUserEmail,
@@ -75,4 +88,5 @@ module.exports = {
     existsCategoryByName,
     existsProductById,
     existsProductByName,
+    validCollections
 }
