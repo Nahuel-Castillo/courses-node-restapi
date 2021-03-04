@@ -1,5 +1,4 @@
-const Role = require('../models/role');
-const User = require('../models/user');
+const { Category, Role, User, Product } = require('../models');
 
 const validateUserRole = async ( role = '' ) => { 
     const roleExist = await Role.findOne( { role } );
@@ -26,8 +25,54 @@ const existsUserById = async( id = '' ) => {
     }
 }
 
+const existsCategoryById = async( id = '' ) => {
+
+    const existsCategory = await Category.findById( id );
+    
+    if ( !existsCategory ) {
+        throw new Error( 'Category not exists' );
+    }
+}
+
+const existsCategoryByName = async( name = '' ) => {
+
+    name = name.toUpperCase();
+
+    const existsCategory = await Category.findOne( { name, state: true } );
+
+    if ( !existsCategory ) {
+        throw new Error( `Category ${ name } not exists` );
+    }
+
+}
+
+const existsProductById = async( id = '' ) => {
+
+    const existsProduct = await Product.findById( id );
+    
+    if ( !existsProduct ) {
+        throw new Error( 'Product not exists' );
+    }
+}
+
+const existsProductByName = async( name = '' ) => {
+
+    name = name.toUpperCase();
+
+    const existsProduct = await Product.findOne( { name, state: true } );
+
+    if ( !existsProduct ) {
+        throw new Error( `Product ${ name } not exists` );
+    }
+
+}
+
 module.exports = {
     validateUserRole,
     validateUserEmail,
-    existsUserById
+    existsUserById,
+    existsCategoryById,
+    existsCategoryByName,
+    existsProductById,
+    existsProductByName,
 }

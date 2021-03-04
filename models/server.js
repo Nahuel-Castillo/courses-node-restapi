@@ -3,6 +3,14 @@ const cors = require('cors');
 
 const { dbConnection } = require('../db/config');
 
+const { 
+    products: productsRouter, 
+    users: usersRouter, 
+    auth: authRouter, 
+    categories: categoriesRouter ,
+    search: searchRouter
+} = require('../routes');
+
 class Server {
 
     constructor() {
@@ -11,8 +19,13 @@ class Server {
         this.port = process.env.PORT;
 
         //routes
-        this.userRoutePath = '/api/users';
-        this.authRoutePath = '/api/auth';
+        this.paths = {
+            auth: '/api/auth',
+            categories: '/api/categories',
+            products: '/api/products',
+            search: '/api/search',
+            users: '/api/users',
+        }; 
 
         //Connect to database
         this.connectDB();
@@ -28,10 +41,16 @@ class Server {
     }
 
     routes() {
-        this.app.use( this.authRoutePath, require('../routes/auth' ) );
-        this.app.use( this.userRoutePath, require('../routes/users') );
-    }
 
+        const { auth, users, categories, products, search } = this.paths;
+
+        this.app.use( auth, authRouter );
+        this.app.use( categories, categoriesRouter );
+        this.app.use( products, productsRouter );
+        this.app.use( search, searchRouter );
+        this.app.use( users, usersRouter );
+    }
+    
     listen() {
         this.app.listen( this.port, () => console.log(`Running on port ${ this.port }`) );
     }

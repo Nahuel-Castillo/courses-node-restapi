@@ -13,7 +13,7 @@ router.use( validateJWT );
 router.get('/', getUser );
 
 router.post('/', [
-    check('name', 'Name is required').not().isEmpty(),
+    check('name', 'Name is required').notEmpty(),
     check('email', 'Email is not valid').isEmail().custom( validateUserEmail ),
     check('password', 'Password is required and have more than 6 letters').isLength({ min: 6 }),
     // check('role', 'Role is not valid').isIn( [ 'USER', 'ADMIN' ] ),
